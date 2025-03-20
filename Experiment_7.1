@@ -1,0 +1,39 @@
+import java.util.PriorityQueue;
+
+class Solution {
+    public int minStoneSum(int[] piles, int k) {
+        // Max Heap to always remove from the pile with the maximum stones
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> b - a);
+        
+        // Add all elements to the max heap
+        for (int pile : piles) {
+            maxHeap.add(pile);
+        }
+        
+        // Perform k operations
+        while (k-- > 0) {
+            int maxPile = maxHeap.poll(); // Get the largest pile
+            maxPile -= maxPile / 2; // Remove floor(maxPile / 2) stones
+            maxHeap.add(maxPile); // Add the modified pile back to heap
+        }
+        
+        // Calculate the total remaining stones
+        int totalStones = 0;
+        while (!maxHeap.isEmpty()) {
+            totalStones += maxHeap.poll();
+        }
+        
+        return totalStones;
+    }
+    
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        int[] piles1 = {5, 4, 9};
+        int k1 = 2;
+        System.out.println(solution.minStoneSum(piles1, k1)); // Output: 12
+        
+        int[] piles2 = {4, 3, 6, 7};
+        int k2 = 3;
+        System.out.println(solution.minStoneSum(piles2, k2)); // Output: 12
+    }
+}
